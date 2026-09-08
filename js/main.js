@@ -73,6 +73,13 @@
       els.homeError.textContent = "Please enter a Google Maps API key.";
       return null;
     }
+    // Google Maps JavaScript API keys are designed to be embedded in
+    // client-side code and are protected via HTTP referrer/API restrictions
+    // configured in the Google Cloud Console, not via secrecy. Since this
+    // app has no backend of its own to store the key more safely, and the
+    // key is already sent in every Street View request the browser makes,
+    // persisting it in localStorage (so returning players don't have to
+    // retype it) does not introduce additional exposure beyond normal use.
     localStorage.setItem("geoduel_apikey", key);
     return key;
   }
