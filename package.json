@@ -1,0 +1,10 @@
+{
+  "name": "geoduel",
+  "version": "1.0.0",
+  "description": "Browser-only, no-backend GeoGuessr-style multiplayer game with peer-to-peer room codes and a drawable play area.",
+  "private": true,
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  },
+  "license": "MIT"
+}
