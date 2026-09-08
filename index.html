@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GeoDuel &mdash; browser-only GeoGuessr-style multiplayer</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<header class="app-header">
+  <h1>GeoDuel</h1>
+  <p class="tagline">A no-backend, browser-only GeoGuessr-style game. Draw an area, share a room code, guess locations with friends.</p>
+</header>
+
+<main id="app">
+
+  <!-- HOME SCREEN -->
+  <section id="screen-home" class="screen active">
+    <div class="card">
+      <h2>Start playing</h2>
+      <label for="player-name">Your name</label>
+      <input id="player-name" type="text" maxlength="20" placeholder="e.g. Ana" />
+
+      <label for="maps-api-key">Google Maps API key <span class="hint">(used only in your browser, never sent anywhere)</span></label>
+      <input id="maps-api-key" type="text" placeholder="AIza..." />
+      <p class="hint">Street View requires a client-side Google Maps JavaScript API key. Get one for free in the
+        <a href="https://console.cloud.google.com/google/maps-apis" target="_blank" rel="noopener">Google Cloud Console</a>.
+        It is stored only in your browser's local storage.</p>
+
+      <div class="home-actions">
+        <div class="home-action">
+          <h3>Host a game</h3>
+          <p>Draw the area to play in and get a room code to share.</p>
+          <button id="btn-host">Host game</button>
+        </div>
+        <div class="home-action">
+          <h3>Join a game</h3>
+          <input id="join-code" type="text" maxlength="8" placeholder="Room code" />
+          <button id="btn-join">Join game</button>
+        </div>
+      </div>
+      <p id="home-error" class="error"></p>
+    </div>
+  </section>
+
+  <!-- AREA SELECTION SCREEN (host only) -->
+  <section id="screen-area" class="screen">
+    <div class="card wide">
+      <h2>Draw the play area</h2>
+      <p>Use the polygon tool on the left of the map to draw the region where rounds should take place. Only the drawn area will be used to pick locations.</p>
+      <div id="area-map" class="map"></div>
+      <div class="row">
+        <label for="round-count">Rounds</label>
+        <input id="round-count" type="number" min="1" max="20" value="5" />
+        <label for="round-time">Seconds per round</label>
+        <input id="round-time" type="number" min="10" max="600" value="90" />
+      </div>
+      <div class="row">
+        <button id="btn-area-back">Back</button>
+        <button id="btn-area-continue" disabled>Continue</button>
+      </div>
+      <p id="area-error" class="error"></p>
+    </div>
+  </section>
+
+  <!-- LOBBY SCREEN -->
+  <section id="screen-lobby" class="screen">
+    <div class="card">
+      <h2>Lobby</h2>
+      <p>Room code:</p>
+      <div class="room-code" id="room-code-display">------</div>
+      <p class="hint">Share this code with friends so they can join.</p>
+      <h3>Players</h3>
+      <ul id="player-list"></ul>
+      <div class="row">
+        <button id="btn-lobby-leave">Leave</button>
+        <button id="btn-lobby-start" style="display:none">Start game</button>
+      </div>
+      <p id="lobby-status" class="hint"></p>
+    </div>
+  </section>
+
+  <!-- GAME SCREEN -->
+  <section id="screen-game" class="screen">
+    <div class="game-hud">
+      <div class="hud-item">Round <span id="hud-round">1</span>/<span id="hud-total-rounds">5</span></div>
+      <div class="hud-item">Time <span id="hud-timer">90</span>s</div>
+      <div class="hud-item">Score <span id="hud-score">0</span></div>
+      <button id="btn-submit-guess" disabled>Submit guess</button>
+    </div>
+    <div class="game-panes">
+      <div id="street-view" class="pane street-view"></div>
+      <div id="guess-map" class="pane guess-map"></div>
+    </div>
+  </section>
+
+  <!-- ROUND RESULT SCREEN -->
+  <section id="screen-round-result" class="screen">
+    <div class="card wide">
+      <h2>Round results</h2>
+      <div id="result-map" class="map"></div>
+      <ul id="result-list"></ul>
+      <button id="btn-next-round">Continue</button>
+    </div>
+  </section>
+
+  <!-- FINAL SCREEN -->
+  <section id="screen-final" class="screen">
+    <div class="card">
+      <h2>Final scores</h2>
+      <ol id="final-list"></ol>
+      <button id="btn-play-again">Back to home</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<script src="js/geometry.js"></script>
+<script src="js/multiplayer.js"></script>
+<script src="js/areaMap.js"></script>
+<script src="js/streetview.js"></script>
+<script src="js/game.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
